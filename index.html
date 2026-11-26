@@ -1,0 +1,281 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kuis Perubahan Wujud Zat</title>
+<style>
+* {box-sizing:border-box}
+body {
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg,#d9f3ff,#e9e4ff);
+  margin:0;
+  padding:20px;
+  color:#26344a;
+}
+.container {
+  max-width:750px;
+  margin:20px auto;
+  background:white;
+  padding:28px;
+  border-radius:18px;
+  box-shadow:0 8px 25px #0002;
+}
+h1 {text-align:center;color:#2457a7}
+.subtitle {text-align:center;color:#667085}
+.info {
+  background:#edf5ff;
+  padding:15px;
+  border-radius:10px;
+  line-height:1.7;
+}
+button {
+  background:#2864c5;
+  color:white;
+  border:none;
+  padding:12px 22px;
+  border-radius:9px;
+  cursor:pointer;
+  font-size:16px;
+  margin-top:15px;
+}
+button:hover {background:#174a9a}
+.option {
+  display:block;
+  background:#f2f6fc;
+  padding:13px;
+  margin:10px 0;
+  border-radius:9px;
+  cursor:pointer;
+  border:2px solid transparent;
+}
+.option:hover {background:#e3efff}
+.option input {margin-right:10px}
+.question {margin:22px 0}
+#quiz,#result {display:none}
+.progress {
+  background:#e5e7eb;
+  height:10px;
+  border-radius:10px;
+  margin:15px 0;
+}
+#bar {
+  background:#2864c5;
+  height:10px;
+  width:0%;
+  border-radius:10px;
+}
+.feedback {
+  background:#f0f7ff;
+  padding:12px;
+  border-radius:8px;
+  margin-top:10px;
+}
+.correct {color:#16834b;font-weight:bold}
+.wrong {color:#d33;font-weight:bold}
+.score {
+  font-size:38px;
+  color:#2864c5;
+  text-align:center;
+  font-weight:bold;
+}
+footer {text-align:center;color:#777;font-size:13px}
+</style>
+</head>
+<body>
+
+<div class="container">
+<h1>🌡️ KUIS IPA SMP</h1>
+<h2 style="text-align:center">Perubahan Wujud Zat</h2>
+<p class="subtitle">Uji pemahamanmu tentang perubahan wujud benda!</p>
+
+<div id="intro">
+<div class="info">
+<b>Petunjuk Pengerjaan:</b>
+<ul>
+<li>Kerjakan 10 soal pilihan ganda.</li>
+<li>Pilih satu jawaban yang paling tepat.</li>
+<li>Setiap jawaban benar mendapat nilai 10.</li>
+<li>Bacalah soal dengan teliti.</li>
+</ul>
+<b>Materi:</b> Mencair, membeku, menguap,
+mengembun, menyublim, dan mengkristal.
+</div>
+<button onclick="startQuiz()">Mulai Kuis 🚀</button>
+</div>
+
+<div id="quiz">
+<div>Soal <span id="number">1</span> dari 10</div>
+<div class="progress"><div id="bar"></div></div>
+<div id="questionArea"></div>
+<button onclick="nextQuestion()" id="nextBtn">Berikutnya ➜</button>
+</div>
+
+<div id="result">
+<h2 style="text-align:center">Hasil Kuis Kamu</h2>
+<div class="score" id="score"></div>
+<p id="message" style="text-align:center"></p>
+<h3>Pembahasan Jawaban:</h3>
+<div id="review"></div>
+<button onclick="restartQuiz()">Ulangi Kuis 🔄</button>
+</div>
+
+<footer>
+<p>IPA SMP | Belajar Sains Menyenangkan</p>
+</footer>
+</div>
+
+<script>
+const questions = [
+{
+q:"Perubahan wujud zat dari padat menjadi cair disebut ....",
+o:["Membeku","Mencair","Menguap","Mengembun"],
+a:1,
+e:"Mencair adalah perubahan wujud dari padat menjadi cair, contohnya es menjadi air."
+},
+{
+q:"Peristiwa air yang dimasukkan ke dalam freezer menjadi es disebut ....",
+o:["Menyublim","Menguap","Membeku","Mengembun"],
+a:2,
+e:"Membeku adalah perubahan wujud dari cair menjadi padat karena melepaskan kalor."
+},
+{
+q:"Pakaian basah yang dijemur menjadi kering karena mengalami ....",
+o:["Menguap","Mencair","Membeku","Mengkristal"],
+a:0,
+e:"Menguap adalah perubahan wujud dari cair menjadi gas."
+},
+{
+q:"Titik-titik air pada bagian luar gelas berisi es merupakan peristiwa ....",
+o:["Menyublim","Menguap","Mengembun","Mencair"],
+a:2,
+e:"Mengembun adalah perubahan wujud gas menjadi cair."
+},
+{
+q:"Kapur barus yang lama-kelamaan habis mengalami ....",
+o:["Membeku","Menyublim","Mencair","Mengembun"],
+a:1,
+e:"Menyublim adalah perubahan wujud dari padat menjadi gas."
+},
+{
+q:"Perubahan wujud gas menjadi padat disebut ....",
+o:["Mengkristal","Menguap","Mencair","Membeku"],
+a:0,
+e:"Mengkristal atau deposisi adalah perubahan wujud gas langsung menjadi padat."
+},
+{
+q:"Peristiwa mencair membutuhkan energi kalor karena ....",
+o:["Zat melepaskan kalor","Zat menyerap kalor","Suhu selalu turun","Zat kehilangan massa"],
+a:1,
+e:"Saat mencair, zat menyerap kalor dari lingkungan."
+},
+{
+q:"Perubahan wujud yang melepaskan kalor ke lingkungan adalah ....",
+o:["Menguap dan mencair","Menyublim dan menguap","Membeku dan mengembun","Mencair dan menyublim"],
+a:2,
+e:"Membeku dan mengembun merupakan perubahan wujud yang melepaskan kalor."
+},
+{
+q:"Terbentuknya embun pada daun di pagi hari merupakan contoh ....",
+o:["Menguap","Mengembun","Menyublim","Mencair"],
+a:1,
+e:"Uap air di udara mengalami pendinginan dan berubah menjadi titik-titik air."
+},
+{
+q:"Ketika es batu dibiarkan di tempat terbuka, es berubah menjadi air. Peristiwa ini menunjukkan bahwa ....",
+o:["Zat melepaskan kalor","Zat menyerap kalor","Zat berubah menjadi gas","Zat mengalami pembekuan"],
+a:1,
+e:"Es menyerap kalor dari lingkungan sehingga berubah dari padat menjadi cair."
+}
+];
+
+let current=0;
+let answers=[];
+
+function startQuiz(){
+  document.getElementById("intro").style.display="none";
+  document.getElementById("quiz").style.display="block";
+  showQuestion();
+}
+
+function showQuestion(){
+  const q=questions[current];
+  document.getElementById("number").textContent=current+1;
+  document.getElementById("bar").style.width=(current/10*100)+"%";
+
+  let html=`<div class="question"><h3>${current+1}. ${q.q}</h3>`;
+  q.o.forEach((option,i)=>{
+    html+=`
+    <label class="option">
+    <input type="radio" name="answer" value="${i}"
+    ${answers[current]===i?"checked":""}>
+    ${String.fromCharCode(65+i)}. ${option}
+    </label>`;
+  });
+  html+="</div>";
+  document.getElementById("questionArea").innerHTML=html;
+
+  document.getElementById("nextBtn").textContent=
+  current===9?"Selesai & Lihat Nilai":"Berikutnya ➜";
+}
+
+function nextQuestion(){
+  const selected=document.querySelector('input[name="answer"]:checked');
+  if(!selected){
+    alert("Silakan pilih jawaban terlebih dahulu!");
+    return;
+  }
+  answers[current]=Number(selected.value);
+
+  if(current<9){
+    current++;
+    showQuestion();
+  }else{
+    showResult();
+  }
+}
+
+function showResult(){
+  let score=0;
+  let review="";
+  questions.forEach((q,i)=>{
+    const correct=answers[i]===q.a;
+    if(correct) score+=10;
+
+    review+=`
+    <div class="feedback">
+    <b>${i+1}. ${q.q}</b><br>
+    <span class="${correct?"correct":"wrong"}">
+    ${correct?"✓ Benar":"✗ Belum tepat"}
+    </span><br>
+    Jawaban kamu: ${q.o[answers[i]]}<br>
+    Jawaban benar: ${q.o[q.a]}<br>
+    <b>Pembahasan:</b> ${q.e}
+    </div>`;
+  });
+
+  document.getElementById("quiz").style.display="none";
+  document.getElementById("result").style.display="block";
+  document.getElementById("score").textContent=score;
+  document.getElementById("review").innerHTML=review;
+
+  let message="";
+  if(score>=90) message="Luar biasa! Pemahamanmu sangat baik! 🏆";
+  else if(score>=70) message="Bagus! Terus tingkatkan belajarmu! ⭐";
+  else if(score>=50) message="Cukup baik. Ayo pelajari kembali materinya!";
+  else message="Jangan menyerah! Tetap semangat belajar! 💪";
+
+  document.getElementById("message").textContent=message;
+  document.getElementById("bar").style.width="100%";
+}
+
+function restartQuiz(){
+  current=0;
+  answers=[];
+  document.getElementById("result").style.display="none";
+  document.getElementById("intro").style.display="block";
+}
+</script>
+</body>
+</html>
